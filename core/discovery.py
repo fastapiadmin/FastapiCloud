@@ -56,7 +56,8 @@ class ServiceDiscoveryClient:
         self,
         consul_host: str = "localhost",
         consul_port: int = 8500,
-        timeout: float = 10.0
+        timeout: float = 10.0,
+        cache_ttl: int = 30
     ):
         """
         初始化服务发现客户端
@@ -65,6 +66,7 @@ class ServiceDiscoveryClient:
             consul_host: Consul主机地址
             consul_port: Consul端口
             timeout: 请求超时时间
+            cache_ttl: 服务缓存有效期（秒）
         """
         self.consul_host = consul_host
         self.consul_port = consul_port
@@ -72,7 +74,7 @@ class ServiceDiscoveryClient:
         self.timeout = timeout
         self.http_client = httpx.AsyncClient(timeout=timeout)
         self.services_cache: Dict[str, List[ServiceInstance]] = {}
-        self.cache_ttl = 30  # 缓存有效期（秒）
+        self.cache_ttl = cache_ttl  # 缓存有效期（秒）
         self.last_cache_update = {}
     
     async def register_service(
@@ -408,8 +410,10 @@ async def get_service_discovery_client() -> ServiceDiscoveryClient:
     global _discovery_client
     if _discovery_client is None:
         _discovery_client = ServiceDiscoveryClient(
-            consul_host=settings.CONSUL_HOST,
-            consul_port=settings.CONSUL_PORT
+            consul_host=settings.discovery.CONSUL_HOST,
+            consul_port=settings.discovery.CONSUL_PORT,
+            timeout=settings.discovery.CONSUL_TIMEOUT,
+            cache_ttl=settings.discovery.SERVICE_CACHE_TTL
         )
     return _discovery_client
 

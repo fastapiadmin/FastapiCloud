@@ -2,17 +2,18 @@
 
 """
 统一中间件模块
-提供一致的中间件处理机制，包括请求日志、跨域处理等
+提供一致的中间件处理机制，包括请求日志、跨域处理、安全头部和速率限制等
 """
 
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.gzip import GZipMiddleware
-from typing import Awaitable, Callable, Optional
+from typing import Awaitable, Callable, Optional, Dict, Set
 import time
 import uuid
+import hashlib
 
 from .logger import logger
 
@@ -120,7 +121,9 @@ def register_middleware_handler(
     enable_gzip: bool = True,
     enable_trusted_hosts: bool = True,
     trusted_hosts: list = ["*"],
-    enable_request_logging: bool = True
+    enable_request_logging: bool = True,
+    enable_security_headers: bool = True,
+    enable_rate_limit: bool = True
 ) -> None:
     """
     注册中间件处理器
@@ -132,6 +135,8 @@ def register_middleware_handler(
         enable_trusted_hosts: 是否启用受信任主机检查
         trusted_hosts: 受信任的主机列表
         enable_request_logging: 是否启用请求日志
+        enable_security_headers: 是否启用安全头部
+        enable_rate_limit: 是否启用速率限制
     """
     
     # 注册请求日志中间件
@@ -159,7 +164,6 @@ def register_middleware_handler(
     # 注册受信任主机中间件
     if enable_trusted_hosts:
         app.add_middleware(TrustedHostMiddleware, allowed_hosts=trusted_hosts)
-
 
 # 默认导出
 __all__ = [

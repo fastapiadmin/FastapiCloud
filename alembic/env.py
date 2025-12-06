@@ -27,7 +27,7 @@ from services.admin.app.models.user import *
 target_metadata = SQLModel.metadata
 
 # 配置数据库连接URL
-config.set_main_option(name="sqlalchemy.url", value=settings.DATABASE_URL)
+config.set_main_option(name="sqlalchemy.url", value=f"sqlite:///{settings.db.BASE_DIR.joinpath(settings.db.SQLITE_DB_NAME)}?check_same_thread=False", )
 
 
 def run_migrations_offline() -> None:

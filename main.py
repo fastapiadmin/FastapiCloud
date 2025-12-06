@@ -165,7 +165,7 @@ def stop_all():
 @app.command(help="显示项目信息")
 def info():
     """显示项目信息"""
-    typer.echo("FastAPI Cloud 项目信息")
+    typer.echo("FastapiCloud 项目信息")
     typer.echo("=" * 30)
     typer.echo(f"项目根目录: {BASE_DIR}")
     typer.echo(f"可用服务: {', '.join(services)}")

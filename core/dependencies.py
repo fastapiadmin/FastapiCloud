@@ -17,7 +17,7 @@ from sqlmodel import select
 
 
 # OAuth2密码承载令牌
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.service.API_V1_STR}/login")
 
 
 async def get_current_user(

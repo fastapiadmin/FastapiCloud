@@ -20,8 +20,8 @@ setup_logging(log_dir=settings.BASE_DIR.joinpath("services/api-gateway/logs"))
 
 # 创建服务发现实例
 service_discovery = ServiceDiscoveryClient(
-    consul_host=settings.CONSUL_HOST,
-    consul_port=settings.CONSUL_PORT
+    consul_host=settings.discovery.CONSUL_HOST,
+    consul_port=settings.discovery.CONSUL_PORT
 )
 
 @asynccontextmanager
@@ -31,17 +31,17 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     """
     # 启动事件
     logger.info("API Gateway 启动中...")
-    logger.info(f"服务名称: {settings.SERVICE_NAME}")
-    logger.info(f"API版本: {settings.API_VERSION}")
-    logger.info(f"服务地址: http://localhost:{settings.SERVICE_PORT}")
+    logger.info(f"服务名称: {settings.service.SERVICE_NAME}")
+    logger.info(f"API版本: {settings.service.API_VERSION}")
+    logger.info(f"服务地址: http://localhost:{settings.service.SERVICE_PORT}")
     
     # 注册服务到Consul
-    service_id = f"{settings.SERVICE_NAME}-{uuid.uuid4()}"
+    service_id = f"{settings.service.SERVICE_NAME}-{uuid.uuid4()}"
     service_address = "localhost"
-    service_port = settings.SERVICE_PORT
+    service_port = settings.service.SERVICE_PORT
     
     await service_discovery.register_service(
-        service_name=settings.SERVICE_NAME,
+        service_name=settings.service.SERVICE_NAME,
         service_id=service_id,
         address=service_address,
         port=service_port,
@@ -70,8 +70,8 @@ def create_app() -> FastAPI:
     创建FastAPI应用实例
     """
     app = FastAPI(
-        title=settings.SERVICE_NAME,
-        version=settings.API_VERSION,
+        title=settings.service.SERVICE_NAME,
+        version=settings.service.API_VERSION,
         description="API Gateway for FastAPI Microservices",
         lifespan=lifespan
     )
@@ -83,7 +83,7 @@ def create_app() -> FastAPI:
     register_exception_handlers(app)
     
     # 注册路由
-    app.include_router(gateway, tags=["网关系统"], prefix=settings.API_V1_STR)
+    app.include_router(gateway, tags=["网关系统"], prefix=settings.service.API_V1_STR)
     
     # 挂载静态文件目录
     app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -94,8 +94,8 @@ def create_app() -> FastAPI:
 if __name__ == "__main__":
     uvicorn.run(
         "main:create_app",
-        host="0.0.0.0",
-        port=settings.SERVICE_PORT,
+        host=settings.service.SERVICE_HOST,
+        port=settings.service.SERVICE_PORT,
         reload=True,
         log_config=None  # 禁用uvicorn默认日志配置，使用自定义日志
     )

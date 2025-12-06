@@ -6,7 +6,6 @@
 """
 
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, Optional
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 
@@ -35,9 +34,9 @@ def create_access_token(
     if payload.exp:
         expire = payload.exp
     else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.jwt.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode["exp"] = expire
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.jwt.SECRET_KEY, algorithm=settings.jwt.ALGORITHM)
     return encoded_jwt
 
 
@@ -52,7 +51,7 @@ def decode_access_token(token: str) -> JWTPayloadSchema:
         JWTPayloadSchema: 解码后的令牌载荷
     """
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(token, settings.jwt.SECRET_KEY, algorithms=[settings.jwt.ALGORITHM])
         return JWTPayloadSchema(**payload)
     except JWTError:
         raise ValueError("无效的令牌")
