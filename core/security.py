@@ -1,20 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""
-安全相关功能模块
-提供密码哈希、JWT令牌生成和验证等功能
-"""
-
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
-from passlib.context import CryptContext
+import bcrypt
 
-from app.config import settings
+from config import settings
 from core.base import JWTPayloadSchema
-
-
-# 密码上下文
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def create_access_token(
@@ -34,9 +25,9 @@ def create_access_token(
     if payload.exp:
         expire = payload.exp
     else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.jwt.ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode["exp"] = expire
-    encoded_jwt = jwt.encode(to_encode, settings.jwt.SECRET_KEY, algorithm=settings.jwt.ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
 
@@ -51,7 +42,7 @@ def decode_access_token(token: str) -> JWTPayloadSchema:
         JWTPayloadSchema: 解码后的令牌载荷
     """
     try:
-        payload = jwt.decode(token, settings.jwt.SECRET_KEY, algorithms=[settings.jwt.ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return JWTPayloadSchema(**payload)
     except JWTError:
         raise ValueError("无效的令牌")
@@ -67,7 +58,11 @@ def set_password_hash(password: str) -> str:
     Returns:
         str: 密码哈希
     """
-    return pwd_context.hash(password)
+    # bcrypt限制密码长度为72字节，超过会自动截断，但这里手动截断以避免警告
+    password_bytes = password[:72].encode('utf-8')
+    salt = bcrypt.gensalt(rounds=12)
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode('utf-8')
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -81,4 +76,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         bool: 密码是否匹配
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    plain_bytes = plain_password[:72].encode('utf-8')
+    hashed_bytes = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_bytes, hashed_bytes)

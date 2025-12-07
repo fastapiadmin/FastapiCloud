@@ -1,4 +1,0 @@
-2025-12-06 17:27:49.060 | INFO     | process [53961]:8564334720 | uvicorn.config:__init__:318 - Will watch for changes in these directories: ['/Users/tao/workspace/FastapiCloud']
-2025-12-06 17:27:49.061 | INFO     | process [53961]:8564334720 | uvicorn.config:bind_socket:524 - Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-2025-12-06 17:27:49.061 | INFO     | process [53961]:8564334720 | uvicorn.supervisors.basereload:startup:80 - Started reloader process [53961] using StatReload
-2025-12-06 17:27:52.842 | INFO     | process [53961]:8564334720 | uvicorn.supervisors.basereload:shutdown:112 - Stopping reloader process [53961]

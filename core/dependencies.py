@@ -1,23 +1,16 @@
 # -*- coding: utf-8 -*-
 
-"""
-依赖注入模块
-提供所有路由的依赖函数
-"""
-
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from sqlmodel import Session
+from sqlmodel import Session, select
 
-from app.config import settings
 from core.database import get_db
 from core.security import decode_access_token
-from core.base import User
-from sqlmodel import select
+from app.api.v1.model import User
 
 
 # OAuth2密码承载令牌
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.service.API_V1_STR}/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 async def get_current_user(

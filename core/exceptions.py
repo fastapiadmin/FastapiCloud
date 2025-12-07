@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
-"""
-统一异常处理模块
-提供一致的异常处理机制和错误响应格式
-"""
 
 import traceback
 from fastapi import Request, HTTPException
 from fastapi.responses import JSONResponse
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from contextvars import ContextVar
 
-from .response import ErrorResponse, ExceptResponse, SuccessResponse
+from core.response import ErrorResponse
 from .logger import get_logger
 
 # 创建请求ID上下文变量
@@ -152,7 +148,7 @@ def register_exception_handlers(app) -> None:
         return response
     
     @app.exception_handler(AppException)
-    async def app_exception_handler(request: Request, exc: AppException):
+    async def app_exception_handler(request: Request, exc: AppException) -> JSONResponse:
         """处理应用程序异常"""
         # 获取请求ID
         request_id = getattr(request.state, "request_id", request_id_ctx_var.get())
@@ -180,13 +176,16 @@ def register_exception_handlers(app) -> None:
         )
     
     @app.exception_handler(HTTPException)
-    async def http_exception_handler(request: Request, exc: HTTPException):
+    async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
         """处理HTTP异常"""
         # 获取请求ID
         request_id = getattr(request.state, "request_id", request_id_ctx_var.get())
         
+        # 处理exc.detail，避免loguru格式化错误
+        detail_str = str(exc.detail)
+        
         # 记录异常日志
-        logger.warning(f"HTTP异常: {exc.detail}", extra={
+        logger.warning("HTTP异常: {}", detail_str, extra={
             "status_code": exc.status_code,
             "headers": exc.headers,
             "request_id": request_id
@@ -195,18 +194,18 @@ def register_exception_handlers(app) -> None:
         # 构建响应
         response_data = {
             "error": f"HTTP_{exc.status_code}",
-            "message": str(exc.detail),
+            "message": detail_str,
             "request_id": request_id
         }
         
         return ErrorResponse(
             data=response_data,
-            message=str(exc.detail),
+            message=detail_str,
             status_code=exc.status_code
         )
     
     @app.exception_handler(StarletteHTTPException)
-    async def starlette_http_exception_handler(request: Request, exc: StarletteHTTPException):
+    async def starlette_http_exception_handler(request: Request, exc: StarletteHTTPException) -> JSONResponse:
         """处理Starlette HTTP异常"""
         # 获取请求ID
         request_id = getattr(request.state, "request_id", request_id_ctx_var.get())
@@ -231,7 +230,7 @@ def register_exception_handlers(app) -> None:
         )
     
     @app.exception_handler(Exception)
-    async def general_exception_handler(request: Request, exc: Exception):
+    async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
         """处理通用异常"""
         # 获取请求ID
         request_id = getattr(request.state, "request_id", request_id_ctx_var.get())
@@ -250,7 +249,7 @@ def register_exception_handlers(app) -> None:
             "details": {"error": str(exc)}
         }
         
-        return ExceptResponse(
+        return ErrorResponse(
             data=response_data,
             message="服务器内部错误",
             status_code=500

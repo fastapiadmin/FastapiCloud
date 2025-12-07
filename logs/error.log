@@ -1,0 +1,1058 @@
+2025-12-08 00:00:29.485 | ERROR    | app.api.v1.controller:login:56 - 登录异常: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-12-08 00:00:29.486 | ERROR    | core.middlewares:dispatch:72 - 请求异常 [f5988cec-d7b0-433c-85aa-428778eff4a9]: "'code'"
+2025-12-08 00:00:29.493 | ERROR    | uvicorn.protocols.http.httptools_impl:run_asgi:414 - Exception in ASGI application
+
+Traceback (most recent call last):
+
+  File "/Users/tao/workspace/FastapiCloud/app/api/v1/controller.py", line 48, in login
+    login_token: JWTOutSchema = UserService.login(db, login_form)
+                                │           │     │   └ <fastapi.security.oauth2.OAuth2PasswordRequestForm object at 0x105ea1870>
+                                │           │     └ <sqlalchemy.orm.session.Session object at 0x105ea1990>
+                                │           └ <classmethod(<function UserService.login at 0x1058ae950>)>
+                                └ <class 'app.api.v1.service.UserService'>
+
+  File "/Users/tao/workspace/FastapiCloud/app/api/v1/service.py", line 38, in login
+    if not verify_password(plain_password=login_form.password, hashed_password=existing_obj.password):
+           │                              │          │                         │            └ <sqlalchemy.orm.attributes.InstrumentedAttribute object at 0x1058087c0>
+           │                              │          │                         └ User()
+           │                              │          └ '123456'
+           │                              └ <fastapi.security.oauth2.OAuth2PasswordRequestForm object at 0x105ea1870>
+           └ <function verify_password at 0x105815750>
+
+  File "/Users/tao/workspace/FastapiCloud/core/security.py", line 79, in verify_password
+    return pwd_context.verify(plain_password, hashed_password)
+           │           │      │               └ '$2b$12$rjGmN9msqoZJy/IG4ScfwuHTFBI4O33gAKQuTmk.p/K.No6AaW.tC'
+           │           │      └ '123456'
+           │           └ <function CryptContext.verify at 0x1057e2290>
+           └ <CryptContext at 0x105317a00>
+
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           │      │      │       │       └ {}
+           │      │      │       └ '$2b$12$rjGmN9msqoZJy/IG4ScfwuHTFBI4O33gAKQuTmk.p/K.No6AaW.tC'
+           │      │      └ '123456'
+           │      └ <classmethod(<function GenericHandler.verify at 0x1057b8ee0>)>
+           └ <class 'passlib.handlers.bcrypt.<customized bcrypt hasher>'>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+           │       │    │              │        └ 'HTFBI4O33gAKQuTmk.p/K.No6AaW.tC'
+           │       │    │              └ '123456'
+           │       │    └ <function _NoBackend._calc_checksum at 0x105814700>
+           │       └ <passlib.handlers.bcrypt.<customized bcrypt hasher> object at 0x105e43bb0>
+           └ <built-in function compare_digest>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    │    └ <classmethod(<function BackendMixin._stub_requires_backend at 0x1057badd0>)>
+    └ <passlib.handlers.bcrypt.<customized bcrypt hasher> object at 0x105e43bb0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    │   └ <classmethod(<function BackendMixin.set_backend at 0x1057bab90>)>
+    └ <class 'passlib.handlers.bcrypt.<customized bcrypt hasher>'>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           │     │           │            └ False
+           │     │           └ 'any'
+           │     └ <classmethod(<function BackendMixin.set_backend at 0x1057bab90>)>
+           └ <class 'passlib.handlers.bcrypt.bcrypt'>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           │   │           │            └ False
+           │   │           └ 'bcrypt'
+           │   └ <classmethod(<function BackendMixin.set_backend at 0x1057bab90>)>
+           └ <class 'passlib.handlers.bcrypt.bcrypt'>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    │   │            │     └ False
+    │   │            └ 'bcrypt'
+    │   └ <classmethod(<function SubclassBackendMixin._set_backend at 0x1057baef0>)>
+    └ <class 'passlib.handlers.bcrypt.bcrypt'>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+          │                     │                 │     └ False
+          │                     │                 └ 'bcrypt'
+          │                     └ <class 'passlib.handlers.bcrypt.bcrypt'>
+          └ <class 'passlib.utils.handlers.SubclassBackendMixin'>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+         │        └ {'name': 'bcrypt', 'dryrun': False}
+         └ <bound method _BcryptBackend._load_backend_mixin of <class 'passlib.handlers.bcrypt._BcryptBackend'>>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           │         │                       │     └ False
+           │         │                       └ 'bcrypt'
+           │         └ <classmethod(<function _BcryptCommon._finalize_backend_mixin at 0x105814550>)>
+           └ <class 'passlib.handlers.bcrypt._BcryptBackend'>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       │               └ '$2a$'
+       └ <function _BcryptCommon._finalize_backend_mixin.<locals>.detect_wrap_bug at 0x106061900>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       │      │       └ b'$2a$04$R1lJ2gkNaoPGdafE.H.16.nVyh2niHsGJhayOHLMiXlI45o8/DU.6'
+       │      └ b'012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012...
+       └ <bound method GenericHandler.verify of <class 'passlib.handlers.bcrypt._BcryptBackend'>>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+           │       │    │              │        └ 'nVyh2niHsGJhayOHLMiXlI45o8/DU.6'
+           │       │    │              └ b'012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012...
+           │       │    └ <function _BcryptBackend._calc_checksum at 0x1058148b0>
+           │       └ <passlib.handlers.bcrypt._BcryptBackend object at 0x105e43ca0>
+           └ <built-in function compare_digest>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+           │       │      │       └ b'$2a$04$R1lJ2gkNaoPGdafE.H.16.'
+           │       │      └ b'012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012...
+           │       └ <built-in function hashpw>
+           └ <module 'bcrypt' from '/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/bcrypt/__init__.py'>
+
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x105e5aef0>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5aa70>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app.<locals>.app at 0x105e5a4d0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 106, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x105e42e90>
+                     └ <function get_request_handler.<locals>.app at 0x105d73be0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 430, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x104430d30>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 316, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'login_form': <fastapi.security.oauth2.OAuth2PasswordRequestForm object at 0x105ea1870>, 'db': <sqlalchemy.orm.session.Sessi...
+                 │         └ <function login at 0x1058af010>
+                 └ Dependant(path_params=[], query_params=[], header_params=[], cookie_params=[], body_params=[], dependencies=[Dependant(path_p...
+
+  File "/Users/tao/workspace/FastapiCloud/app/api/v1/controller.py", line 57, in login
+    raise ExceptResponse(message="登录失败，请稍后重试")
+          └ <class 'core.response.ExceptResponse'>
+
+core.response.ExceptResponse: 500: {'code': 500, 'message': '登录失败，请稍后重试', 'data': None}
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 3
+               │     └ 39
+               └ <function _main at 0x102823880>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/spawn.py", line 129, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 3
+           │    └ <function BaseProcess._bootstrap at 0x102751e10>
+           └ <SpawnProcess name='SpawnProcess-1' parent=19072 started>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x102751480>
+    └ <SpawnProcess name='SpawnProcess-1' parent=19072 started>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x102864160>, 'target': <bound method Server.run of <uvicorn.server.Server object...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=19072 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=19072 started>
+    │    └ <function subprocess_started at 0x105a57e20>
+    └ <SpawnProcess name='SpawnProcess-1' parent=19072 started>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=36, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('0.0.0.0', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x102864130>>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x105a56b00>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x102864160>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x102864130>
+           │           │    │             └ [<socket.socket fd=36, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('0.0.0.0', 8000)>]
+           │           │    └ <function Server.serve at 0x105a57520>
+           │           └ <uvicorn.server.Server object at 0x102864130>
+           └ <function asyncio_run at 0x105a544c0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+           │    │                  └ <coroutine object Server.serve at 0x105a52810>
+           │    └ <cyfunction Loop.run_until_complete at 0x105a022c0>
+           └ <uvloop.Loop running=True closed=False debug=False>
+> File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105d5ee30>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x105ea3e50>>
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x105ea3e...
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x10596dba0>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105d5ee30>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/applications.py", line 1139, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x105ea3e50>>
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x105ea3e...
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x105ea3e50>>
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x105ea3e...
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x105d5d180>
+          └ <fastapi.applications.FastAPI object at 0x10596dba0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x105e59900>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x105ea3e...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x105d5d0f0>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x105d5d180>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+         │            │            └ <function collapse_excgroups at 0x104375480>
+         │            └ MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=0, buffer=deque([]), open_send_channels=0, open_receiv...
+         └ MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=0, buffer=deque([]), open_send_channels=0, open_rec...
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 153, in __exit__
+    self.gen.throw(typ, value, traceback)
+    │    │   │     │    │      └ <traceback object at 0x105e7c400>
+    │    │   │     │    └ ExceptionGroup('unhandled errors in a TaskGroup', [KeyError("'code'")])
+    │    │   │     └ <class 'exceptiongroup.ExceptionGroup'>
+    │    │   └ <method 'throw' of 'generator' objects>
+    │    └ <generator object collapse_excgroups at 0x105e26ce0>
+    └ <contextlib._GeneratorContextManager object at 0x105ea32b0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_utils.py", line 85, in collapse_excgroups
+    raise exc
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+                     │    │             │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x105e5a5f0>
+                     │    │             └ <starlette.middleware.base._CachedRequest object at 0x105ea2020>
+                     │    └ <function register_exception_handlers.<locals>.add_request_id at 0x105d72e60>
+                     └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x105d5d0f0>
+
+  File "/Users/tao/workspace/FastapiCloud/core/exceptions.py", line 143, in add_request_id
+    response = await call_next(request)
+                     │         └ <starlette.middleware.base._CachedRequest object at 0x105ea2020>
+                     └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x105e5a5f0>
+
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+          │            │       │            │       └ <attribute '__context__' of 'BaseException' objects>
+          │            │       │            └ KeyError("'code'")
+          │            │       └ <attribute '__cause__' of 'BaseException' objects>
+          │            └ KeyError("'code'")
+          └ KeyError("'code'")
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x105e59510>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5a3b0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.trustedhost.TrustedHostMiddleware object at 0x105d5d030>
+          └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x105d5d0f0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/trustedhost.py", line 36, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x105e59510>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5a3b0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.gzip.GZipMiddleware object at 0x105d5df60>
+          └ <starlette.middleware.trustedhost.TrustedHostMiddleware object at 0x105d5d030>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/gzip.py", line 29, in __call__
+    await responder(scope, receive, send)
+          │         │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x105e59510>
+          │         │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5a3b0>
+          │         └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <starlette.middleware.gzip.GZipResponder object at 0x105ea3070>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/gzip.py", line 130, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x105e59510>
+                           │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5a3b0>
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/gzip.py", line 46, in __call__
+    await self.app(scope, receive, self.send_with_compression)
+          │    │   │      │        │    └ <function IdentityResponder.send_with_compression at 0x1047aacb0>
+          │    │   │      │        └ <starlette.middleware.gzip.GZipResponder object at 0x105ea3070>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5a3b0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.cors.CORSMiddleware object at 0x105d5e1a0>
+          └ <starlette.middleware.gzip.GZipResponder object at 0x105ea3070>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+          │    │               │      │        │                     └ Headers({'host': '0.0.0.0:8000', 'connection': 'keep-alive', 'content-length': '50', 'authorization': 'Basic Og==', 'x-reques...
+          │    │               │      │        └ <bound method IdentityResponder.send_with_compression of <starlette.middleware.gzip.GZipResponder object at 0x105ea3070>>
+          │    │               │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5a3b0>
+          │    │               └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function CORSMiddleware.simple_response at 0x1047a8f70>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x105d5e1a0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+          │    │   │      │        └ functools.partial(<bound method CORSMiddleware.send of <starlette.middleware.cors.CORSMiddleware object at 0x105d5e1a0>>, sen...
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5a3b0>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <core.middlewares.RequestLoggingMiddleware object at 0x105d5e230>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x105d5e1a0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+         │            │            └ <function collapse_excgroups at 0x104375480>
+         │            └ MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=0, buffer=deque([]), open_send_channels=0, open_receiv...
+         └ MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=0, buffer=deque([]), open_send_channels=0, open_rec...
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 153, in __exit__
+    self.gen.throw(typ, value, traceback)
+    │    │   │     │    │      └ <traceback object at 0x105ef5840>
+    │    │   │     │    └ ExceptionGroup('unhandled errors in a TaskGroup', [KeyError("'code'")])
+    │    │   │     └ <class 'exceptiongroup.ExceptionGroup'>
+    │    │   └ <method 'throw' of 'generator' objects>
+    │    └ <generator object collapse_excgroups at 0x105e26c00>
+    └ <contextlib._GeneratorContextManager object at 0x105ea2890>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_utils.py", line 85, in collapse_excgroups
+    raise exc
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+                     │    │             │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x105e5a440>
+                     │    │             └ <starlette.middleware.base._CachedRequest object at 0x105ea36d0>
+                     │    └ <bound method RequestLoggingMiddleware.dispatch of <core.middlewares.RequestLoggingMiddleware object at 0x105d5e230>>
+                     └ <core.middlewares.RequestLoggingMiddleware object at 0x105d5e230>
+
+  File "/Users/tao/workspace/FastapiCloud/core/middlewares.py", line 50, in dispatch
+    response = await call_next(request)
+                     │         └ <starlette.middleware.base._CachedRequest object at 0x105ea36d0>
+                     └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x105e5a440>
+
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+          │            │       │            │       └ <attribute '__context__' of 'BaseException' objects>
+          │            │       │            └ KeyError("'code'")
+          │            │       └ <attribute '__cause__' of 'BaseException' objects>
+          │            └ KeyError("'code'")
+          └ KeyError("'code'")
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x105e5a830>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5aa70>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x105d5e260>
+          └ <core.middlewares.RequestLoggingMiddleware object at 0x105d5e230>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x105e5a830>
+          │                            │    │    │     │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5aa70>
+          │                            │    │    │     └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    │    └ <starlette.requests.Request object at 0x105ea3f70>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x105d5e2c0>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x105d5e260>
+          └ <function wrap_app_handling_exceptions at 0x10440d990>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x105d8b760>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5aa70>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x105d5e2c0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x105d8b760>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5aa70>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x105d75720>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x105d5e2c0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x105d8b760>
+          │    │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5aa70>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <bound method Router.app of <fastapi.routing.APIRouter object at 0x105d75720>>
+          └ <fastapi.routing.APIRouter object at 0x105d75720>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x105d8b760>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5aa70>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function Route.handle at 0x10440f010>
+          └ APIRoute(path='/login', name='login', methods=['POST'])
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x105d8b760>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5aa70>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function request_response.<locals>.app at 0x105d73d90>
+          └ APIRoute(path='/login', name='login', methods=['POST'])
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 120, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x105d8b760>
+          │                            │    │        │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x105e5aa70>
+          │                            │    │        └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    └ <starlette.requests.Request object at 0x105e42e90>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x105e5a4d0>
+          └ <function wrap_app_handling_exceptions at 0x10440d990>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 59, in wrapped_app
+    response = await handler(conn, exc)
+                     │       └ <starlette.requests.Request object at 0x105e42e90>
+                     └ <function register_exception_handlers.<locals>.http_exception_handler at 0x105d72f80>
+
+  File "/Users/tao/workspace/FastapiCloud/core/exceptions.py", line 185, in http_exception_handler
+    logger.warning(f"HTTP异常: {exc.detail}", extra={
+    │      └ <function Logger.warning at 0x1047a8550>
+    └ <loguru.logger handlers=[(id=4, level=20, sink=<stdout>), (id=5, level=20, sink='logs/info.log'), (id=6, level=40, sink='logs...
+
+KeyError: "'code'"
+2025-12-08 00:02:05.340 | ERROR    | core.database:create_db_and_tables:94 - 创建数据库表失败: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-12-08 00:02:05.341 | ERROR    | main:lifespan:33 - 用户服务启动失败: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-12-08 00:02:05.341 | ERROR    | uvicorn.lifespan.on:send:121 - Traceback (most recent call last):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 206, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi_pagination/api.py", line 350, in lifespan
+    async with _original_lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 34, in lifespan
+    raise e
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 29, in lifespan
+    await create_db_and_tables()
+  File "/Users/tao/workspace/FastapiCloud/core/database.py", line 80, in create_db_and_tables
+    password=set_password_hash("123456"),
+  File "/Users/tao/workspace/FastapiCloud/core/security.py", line 65, in set_password_hash
+    return pwd_context.hash(password)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/context.py", line 2258, in hash
+    return record.hash(secret, **kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 779, in hash
+    self.checksum = self._calc_checksum(secret)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+2025-12-08 00:02:05.342 | ERROR    | uvicorn.lifespan.on:startup:59 - Application startup failed. Exiting.
+2025-12-08 00:02:32.251 | ERROR    | uvicorn.config:bind_socket:536 - [Errno 48] Address already in use
+2025-12-08 00:02:55.574 | ERROR    | core.database:create_db_and_tables:94 - 创建数据库表失败: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-12-08 00:02:55.574 | ERROR    | main:lifespan:33 - 用户服务启动失败: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-12-08 00:02:55.575 | ERROR    | uvicorn.lifespan.on:send:121 - Traceback (most recent call last):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 206, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi_pagination/api.py", line 350, in lifespan
+    async with _original_lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 34, in lifespan
+    raise e
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 29, in lifespan
+    await create_db_and_tables()
+  File "/Users/tao/workspace/FastapiCloud/core/database.py", line 80, in create_db_and_tables
+    password=set_password_hash("123456"),
+  File "/Users/tao/workspace/FastapiCloud/core/security.py", line 65, in set_password_hash
+    return pwd_context.hash(password)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/context.py", line 2258, in hash
+    return record.hash(secret, **kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 779, in hash
+    self.checksum = self._calc_checksum(secret)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+2025-12-08 00:02:55.575 | ERROR    | uvicorn.lifespan.on:startup:59 - Application startup failed. Exiting.
+2025-12-08 00:03:31.537 | ERROR    | core.database:create_db_and_tables:94 - 创建数据库表失败: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-12-08 00:03:31.537 | ERROR    | main:lifespan:33 - 用户服务启动失败: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-12-08 00:03:31.538 | ERROR    | uvicorn.lifespan.on:send:121 - Traceback (most recent call last):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 206, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi_pagination/api.py", line 350, in lifespan
+    async with _original_lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 34, in lifespan
+    raise e
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 29, in lifespan
+    await create_db_and_tables()
+  File "/Users/tao/workspace/FastapiCloud/core/database.py", line 80, in create_db_and_tables
+    password=set_password_hash("123456"),
+  File "/Users/tao/workspace/FastapiCloud/core/security.py", line 66, in set_password_hash
+    return pwd_context.hash(password[:72])
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/context.py", line 2258, in hash
+    return record.hash(secret, **kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 779, in hash
+    self.checksum = self._calc_checksum(secret)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+2025-12-08 00:03:31.538 | ERROR    | uvicorn.lifespan.on:startup:59 - Application startup failed. Exiting.
+2025-12-08 00:03:42.837 | ERROR    | core.database:create_db_and_tables:94 - 创建数据库表失败: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-12-08 00:03:42.837 | ERROR    | main:lifespan:33 - 用户服务启动失败: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+2025-12-08 00:03:42.838 | ERROR    | uvicorn.lifespan.on:send:121 - Traceback (most recent call last):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 206, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi_pagination/api.py", line 350, in lifespan
+    async with _original_lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 34, in lifespan
+    raise e
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 29, in lifespan
+    await create_db_and_tables()
+  File "/Users/tao/workspace/FastapiCloud/core/database.py", line 80, in create_db_and_tables
+    password=set_password_hash("123456"),
+  File "/Users/tao/workspace/FastapiCloud/core/security.py", line 71, in set_password_hash
+    return pwd_context.hash(password[:72])
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/context.py", line 2258, in hash
+    return record.hash(secret, **kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 779, in hash
+    self.checksum = self._calc_checksum(secret)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+2025-12-08 00:03:42.839 | ERROR    | uvicorn.lifespan.on:startup:59 - Application startup failed. Exiting.
+2025-12-08 00:04:01.432 | ERROR    | core.database:create_db_and_tables:94 - 创建数据库表失败: argon2: no backends available -- recommend you install one (e.g. 'pip install argon2_cffi')
+2025-12-08 00:04:01.432 | ERROR    | main:lifespan:33 - 用户服务启动失败: argon2: no backends available -- recommend you install one (e.g. 'pip install argon2_cffi')
+2025-12-08 00:04:01.436 | ERROR    | uvicorn.lifespan.on:send:121 - Traceback (most recent call last):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 206, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi_pagination/api.py", line 350, in lifespan
+    async with _original_lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 34, in lifespan
+    raise e
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 29, in lifespan
+    await create_db_and_tables()
+  File "/Users/tao/workspace/FastapiCloud/core/database.py", line 80, in create_db_and_tables
+    password=set_password_hash("123456"),
+  File "/Users/tao/workspace/FastapiCloud/core/security.py", line 70, in set_password_hash
+    return pwd_context.hash(password[:72])
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/context.py", line 2258, in hash
+    return record.hash(secret, **kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/argon2.py", line 664, in hash
+    cls._stub_requires_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: argon2: no backends available -- recommend you install one (e.g. 'pip install argon2_cffi')
+
+2025-12-08 00:04:01.436 | ERROR    | uvicorn.lifespan.on:startup:59 - Application startup failed. Exiting.
+2025-12-08 00:04:08.485 | ERROR    | core.database:create_db_and_tables:94 - 创建数据库表失败: argon2: no backends available -- recommend you install one (e.g. 'pip install argon2_cffi')
+2025-12-08 00:04:08.485 | ERROR    | main:lifespan:33 - 用户服务启动失败: argon2: no backends available -- recommend you install one (e.g. 'pip install argon2_cffi')
+2025-12-08 00:04:08.489 | ERROR    | uvicorn.lifespan.on:send:121 - Traceback (most recent call last):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 206, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi_pagination/api.py", line 350, in lifespan
+    async with _original_lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 34, in lifespan
+    raise e
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 29, in lifespan
+    await create_db_and_tables()
+  File "/Users/tao/workspace/FastapiCloud/core/database.py", line 80, in create_db_and_tables
+    password=set_password_hash("123456"),
+  File "/Users/tao/workspace/FastapiCloud/core/security.py", line 70, in set_password_hash
+    return pwd_context.hash(password[:72])
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/context.py", line 2258, in hash
+    return record.hash(secret, **kwds)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/handlers/argon2.py", line 664, in hash
+    cls._stub_requires_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/passlib/utils/handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: argon2: no backends available -- recommend you install one (e.g. 'pip install argon2_cffi')
+
+2025-12-08 00:04:08.489 | ERROR    | uvicorn.lifespan.on:startup:59 - Application startup failed. Exiting.
+2025-12-08 00:04:36.692 | ERROR    | core.database:create_db_and_tables:94 - 创建数据库表失败: name 'pwd_context' is not defined
+2025-12-08 00:04:36.692 | ERROR    | main:lifespan:33 - 用户服务启动失败: name 'pwd_context' is not defined
+2025-12-08 00:04:36.697 | ERROR    | uvicorn.lifespan.on:send:121 - Traceback (most recent call last):
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 206, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi_pagination/api.py", line 350, in lifespan
+    async with _original_lifespan_context(app) as maybe_state:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 34, in lifespan
+    raise e
+  File "/Users/tao/workspace/FastapiCloud/main.py", line 29, in lifespan
+    await create_db_and_tables()
+  File "/Users/tao/workspace/FastapiCloud/core/database.py", line 80, in create_db_and_tables
+    password=set_password_hash("123456"),
+  File "/Users/tao/workspace/FastapiCloud/core/security.py", line 62, in set_password_hash
+    return pwd_context.hash(password[:72])
+NameError: name 'pwd_context' is not defined
+
+2025-12-08 00:04:36.698 | ERROR    | uvicorn.lifespan.on:startup:59 - Application startup failed. Exiting.
+2025-12-08 00:08:35.671 | ERROR    | app.api.v1.controller:get_users:104 - 查询用户列表异常: Object of type Page[User] is not JSON serializable
+2025-12-08 00:08:35.672 | ERROR    | core.middlewares:dispatch:72 - 请求异常 [4b4efe57-6b66-4634-a3f0-3950b771d293]: "'code'"
+2025-12-08 00:08:35.683 | ERROR    | uvicorn.protocols.http.httptools_impl:run_asgi:414 - Exception in ASGI application
+
+Traceback (most recent call last):
+
+  File "/Users/tao/workspace/FastapiCloud/app/api/v1/controller.py", line 101, in get_users
+    return SuccessResponse(data=users)
+           │                    └ Page[User](items=[], total=0, page=1, size=50, pages=0)
+           └ <class 'core.response.SuccessResponse'>
+
+  File "/Users/tao/workspace/FastapiCloud/core/response.py", line 61, in __init__
+    super().__init__(content=content, status_code=status_code)
+                             │                    └ 200
+                             └ {'code': 200, 'message': '成功', 'data': Page[User](items=[], total=0, page=1, size=50, pages=0)}
+
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/responses.py", line 189, in __init__
+    super().__init__(content, status_code, headers, media_type, background)
+                     │        │            │        │           └ None
+                     │        │            │        └ None
+                     │        │            └ None
+                     │        └ 200
+                     └ {'code': 200, 'message': '成功', 'data': Page[User](items=[], total=0, page=1, size=50, pages=0)}
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/responses.py", line 46, in __init__
+    self.body = self.render(content)
+    │           │    │      └ {'code': 200, 'message': '成功', 'data': Page[User](items=[], total=0, page=1, size=50, pages=0)}
+    │           │    └ <function JSONResponse.render at 0x10349d000>
+    │           └ <core.response.SuccessResponse object at 0x1056309a0>
+    └ <core.response.SuccessResponse object at 0x1056309a0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/responses.py", line 192, in render
+    return json.dumps(
+           │    └ <function dumps at 0x100d16320>
+           └ <module 'json' from '/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/json/__init__.py'>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+      │          └ {'code': 200, 'message': '成功', 'data': Page[User](items=[], total=0, page=1, size=50, pages=0)}
+      └ {}
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             │    │          └ {'code': 200, 'message': '成功', 'data': Page[User](items=[], total=0, page=1, size=50, pages=0)}
+             │    └ <function JSONEncoder.iterencode at 0x100d16710>
+             └ <json.encoder.JSONEncoder object at 0x105630400>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+           │           └ {'code': 200, 'message': '成功', 'data': Page[User](items=[], total=0, page=1, size=50, pages=0)}
+           └ <_json.Encoder object at 0x10567ab60>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+
+TypeError: Object of type Page[User] is not JSON serializable
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x10562a320>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x10562a200>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <function request_response.<locals>.app.<locals>.app at 0x105629ea0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 106, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x105633c10>
+                     └ <function get_request_handler.<locals>.app at 0x104e22dd0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 430, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x1034d0d30>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 316, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'query': UserQuerySchema(name='admin'), 'params': Params(page=1, size=50), 'db': <sqlalchemy.orm.session.Session object at 0...
+                 │         └ <function get_users at 0x1048451b0>
+                 └ Dependant(path_params=[], query_params=[], header_params=[], cookie_params=[], body_params=[], dependencies=[Dependant(path_p...
+
+  File "/Users/tao/workspace/FastapiCloud/app/api/v1/controller.py", line 105, in get_users
+    raise ExceptResponse(message="查询用户列表失败，请稍后重试")
+          └ <class 'core.response.ExceptResponse'>
+
+core.response.ExceptResponse: 500: {'code': 500, 'message': '查询用户列表失败，请稍后重试', 'data': None}
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 3
+               │     └ 39
+               └ <function _main at 0x1009bb880>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/spawn.py", line 129, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 3
+           │    └ <function BaseProcess._bootstrap at 0x100869e10>
+           └ <SpawnProcess name='SpawnProcess-1' parent=23747 started>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x100869480>
+    └ <SpawnProcess name='SpawnProcess-1' parent=23747 started>
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x1009fc070>, 'target': <bound method Server.run of <uvicorn.server.Server object...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=23747 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=23747 started>
+    │    └ <function subprocess_started at 0x104b244c0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=23747 started>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=36, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('0.0.0.0', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x1009fc0a0>>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x104af3130>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x1009fc070>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x1009fc0a0>
+           │           │    │             └ [<socket.socket fd=36, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('0.0.0.0', 8000)>]
+           │           │    └ <function Server.serve at 0x104af3b50>
+           │           └ <uvicorn.server.Server object at 0x1009fc0a0>
+           └ <function asyncio_run at 0x104af0af0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+           │    │                  └ <coroutine object Server.serve at 0x104adb6f0>
+           │    └ <cyfunction Loop.run_until_complete at 0x104b90700>
+           └ <uvloop.Loop running=True closed=False debug=False>
+> File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x104e40460>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x104ebef80>>
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x104ebef...
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x104b46ef0>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x104e40460>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/applications.py", line 1139, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x104ebef80>>
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x104ebef...
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x104ebef80>>
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x104ebef...
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x104e40e20>
+          └ <fastapi.applications.FastAPI object at 0x104b46ef0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x104e8caf0>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.httptools_impl.RequestResponseCycle object at 0x104ebef...
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x104e40dc0>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x104e40e20>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+         │            │            └ <function collapse_excgroups at 0x103415480>
+         │            └ MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=0, buffer=deque([]), open_send_channels=0, open_receiv...
+         └ MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=0, buffer=deque([]), open_send_channels=0, open_rec...
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 153, in __exit__
+    self.gen.throw(typ, value, traceback)
+    │    │   │     │    │      └ <traceback object at 0x10564fc40>
+    │    │   │     │    └ ExceptionGroup('unhandled errors in a TaskGroup', [KeyError("'code'")])
+    │    │   │     └ <class 'exceptiongroup.ExceptionGroup'>
+    │    │   └ <method 'throw' of 'generator' objects>
+    │    └ <generator object collapse_excgroups at 0x104e50e40>
+    └ <contextlib._GeneratorContextManager object at 0x105630130>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_utils.py", line 85, in collapse_excgroups
+    raise exc
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+                     │    │             │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x104e22b00>
+                     │    │             └ <starlette.middleware.base._CachedRequest object at 0x105632ef0>
+                     │    └ <function register_exception_handlers.<locals>.add_request_id at 0x104e03490>
+                     └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x104e40dc0>
+
+  File "/Users/tao/workspace/FastapiCloud/core/exceptions.py", line 143, in add_request_id
+    response = await call_next(request)
+                     │         └ <starlette.middleware.base._CachedRequest object at 0x105632ef0>
+                     └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x104e22b00>
+
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+          │            │       │            │       └ <attribute '__context__' of 'BaseException' objects>
+          │            │       │            └ KeyError("'code'")
+          │            │       └ <attribute '__cause__' of 'BaseException' objects>
+          │            └ KeyError("'code'")
+          └ KeyError("'code'")
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x104e23d00>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x104e23c70>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.trustedhost.TrustedHostMiddleware object at 0x104e40d60>
+          └ <starlette.middleware.base.BaseHTTPMiddleware object at 0x104e40dc0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/trustedhost.py", line 36, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x104e23d00>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x104e23c70>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.gzip.GZipMiddleware object at 0x104e40d00>
+          └ <starlette.middleware.trustedhost.TrustedHostMiddleware object at 0x104e40d60>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/gzip.py", line 29, in __call__
+    await responder(scope, receive, send)
+          │         │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x104e23d00>
+          │         │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x104e23c70>
+          │         └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <starlette.middleware.gzip.IdentityResponder object at 0x1056327d0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/gzip.py", line 46, in __call__
+    await self.app(scope, receive, self.send_with_compression)
+          │    │   │      │        │    └ <function IdentityResponder.send_with_compression at 0x1036eacb0>
+          │    │   │      │        └ <starlette.middleware.gzip.IdentityResponder object at 0x1056327d0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x104e23c70>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.cors.CORSMiddleware object at 0x104e40cd0>
+          └ <starlette.middleware.gzip.IdentityResponder object at 0x1056327d0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <bound method IdentityResponder.send_with_compression of <starlette.middleware.gzip.IdentityResponder object at 0x1056327d0>>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x104e23c70>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <core.middlewares.RequestLoggingMiddleware object at 0x104e40c40>
+          └ <starlette.middleware.cors.CORSMiddleware object at 0x104e40cd0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+         │            │            └ <function collapse_excgroups at 0x103415480>
+         │            └ MemoryObjectSendStream(_state=_MemoryObjectStreamState(max_buffer_size=0, buffer=deque([]), open_send_channels=0, open_receiv...
+         └ MemoryObjectReceiveStream(_state=_MemoryObjectStreamState(max_buffer_size=0, buffer=deque([]), open_send_channels=0, open_rec...
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/contextlib.py", line 153, in __exit__
+    self.gen.throw(typ, value, traceback)
+    │    │   │     │    │      └ <traceback object at 0x105635d00>
+    │    │   │     │    └ ExceptionGroup('unhandled errors in a TaskGroup', [KeyError("'code'")])
+    │    │   │     └ <class 'exceptiongroup.ExceptionGroup'>
+    │    │   └ <method 'throw' of 'generator' objects>
+    │    └ <generator object collapse_excgroups at 0x104e53a70>
+    └ <contextlib._GeneratorContextManager object at 0x105632a10>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_utils.py", line 85, in collapse_excgroups
+    raise exc
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+                     │    │             │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x105629f30>
+                     │    │             └ <starlette.middleware.base._CachedRequest object at 0x105632950>
+                     │    └ <bound method RequestLoggingMiddleware.dispatch of <core.middlewares.RequestLoggingMiddleware object at 0x104e40c40>>
+                     └ <core.middlewares.RequestLoggingMiddleware object at 0x104e40c40>
+
+  File "/Users/tao/workspace/FastapiCloud/core/middlewares.py", line 50, in dispatch
+    response = await call_next(request)
+                     │         └ <starlette.middleware.base._CachedRequest object at 0x105632950>
+                     └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x105629f30>
+
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+          │            │       │            │       └ <attribute '__context__' of 'BaseException' objects>
+          │            │       │            └ KeyError("'code'")
+          │            │       └ <attribute '__cause__' of 'BaseException' objects>
+          │            └ KeyError("'code'")
+          └ KeyError("'code'")
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+          │    │   │      │                      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x105629cf0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x10562a200>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x104e40c10>
+          └ <core.middlewares.RequestLoggingMiddleware object at 0x104e40c40>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.send_no_error at 0x105629cf0>
+          │                            │    │    │     │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x10562a200>
+          │                            │    │    │     └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    │    └ <starlette.requests.Request object at 0x105630d00>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x104e40bb0>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x104e40c10>
+          └ <function wrap_app_handling_exceptions at 0x1034ad990>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x10562a4d0>
+          │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x10562a200>
+          │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x104e40bb0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x10562a4d0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x10562a200>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <fastapi.routing.APIRouter object at 0x104a01510>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x104e40bb0>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x10562a4d0>
+          │    │                │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x10562a200>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <bound method Router.app of <fastapi.routing.APIRouter object at 0x104a01510>>
+          └ <fastapi.routing.APIRouter object at 0x104a01510>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x10562a4d0>
+          │     │      │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x10562a200>
+          │     │      └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │     └ <function Route.handle at 0x1034af010>
+          └ APIRoute(path='/users', name='get_users', methods=['GET'])
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x10562a4d0>
+          │    │   │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x10562a200>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │    └ <function request_response.<locals>.app at 0x104e22c20>
+          └ APIRoute(path='/users', name='get_users', methods=['GET'])
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 120, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x10562a4d0>
+          │                            │    │        │      └ <function BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.receive_or_disconnect at 0x10562a200>
+          │                            │    │        └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8000), 'cl...
+          │                            │    └ <starlette.requests.Request object at 0x105633c10>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x105629ea0>
+          └ <function wrap_app_handling_exceptions at 0x1034ad990>
+  File "/Users/tao/workspace/FastapiCloud/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 59, in wrapped_app
+    response = await handler(conn, exc)
+                     │       └ <starlette.requests.Request object at 0x105633c10>
+                     └ <function register_exception_handlers.<locals>.http_exception_handler at 0x104e035b0>
+
+  File "/Users/tao/workspace/FastapiCloud/core/exceptions.py", line 185, in http_exception_handler
+    logger.warning(f"HTTP异常: {exc.detail}", extra={
+    │      └ <function Logger.warning at 0x1036e8550>
+    └ <loguru.logger handlers=[(id=4, level=20, sink=<stdout>), (id=5, level=20, sink='logs/info.log'), (id=6, level=40, sink='logs...
+
+KeyError: "'code'"
+2025-12-08 00:13:35.875 | ERROR    | app.api.v1.controller:get_users:104 - 查询用户列表异常: Object of type Page[User] is not JSON serializable
+2025-12-08 00:18:23.699 | ERROR    | app.api.v1.controller:get_users:104 - 查询用户列表异常: Object of type Page[UserOutSchema] is not JSON serializable
+2025-12-08 00:29:50.490 | ERROR    | app.api.v1.controller:get_users:104 - 查询用户列表异常: Object of type Page[User] is not JSON serializable
+2025-12-08 00:30:20.851 | ERROR    | app.api.v1.controller:get_users:104 - 查询用户列表异常: Object of type method is not JSON serializable

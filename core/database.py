@@ -1,25 +1,21 @@
 # -*- coding: utf-8 -*-
 
-"""
-统一数据库访问层
-提供一致的数据库访问接口，支持同步和异步操作
-"""
+import time
 from typing import Any, Generator
-from sqlmodel import SQLModel, create_engine, Session
+from sqlmodel import SQLModel, create_engine, Session, select
 from sqlalchemy.engine.base import Engine
 from sqlalchemy import event
 from sqlalchemy.orm import sessionmaker
 from collections.abc import Generator
-import time
 
-from app.config import settings
+from config import settings
 from .logger import logger
 
 
 # 同步数据库引擎（兼容旧代码）
 engine: Engine = create_engine(
-    url=f"sqlite:///{settings.db.BASE_DIR.joinpath(settings.db.SQLITE_DB_NAME)}?check_same_thread=False", 
-    echo=settings.db.DB_ECHO
+    url=f"sqlite:///{settings.BASE_DIR.joinpath(settings.SQLITE_DB_NAME)}?check_same_thread=False", 
+    echo=False
 )
 
 SessionLocal = sessionmaker(
@@ -27,7 +23,6 @@ SessionLocal = sessionmaker(
     class_=Session,
     expire_on_commit=False
 )
-
 
 # 连接监控事件
 @event.listens_for(engine, "connect")
@@ -67,8 +62,6 @@ def get_db() -> Generator[Session, Any, None]:
         except Exception:
             session.rollback()
             raise
-        finally:
-            session.close()
 
 
 async def create_db_and_tables() -> None:
@@ -78,6 +71,25 @@ async def create_db_and_tables() -> None:
     try:
         SQLModel.metadata.create_all(bind=engine)    
         logger.info("数据库表创建成功")
+        from app.api.v1.model import User
+        # 创建默认用户
+        from core.security import set_password_hash
+        default_user = User(
+            name="管理员",
+            username="admin",
+            password=set_password_hash("123456"),
+            status=True,
+            is_superuser=True
+        )
+        with SessionLocal() as session:
+            # 检查默认用户是否已存在
+            existing_user = session.exec(
+                select(User).where(User.username == default_user.username)
+            ).first()
+            if not existing_user:
+                session.add(default_user)
+                session.commit()
+                logger.info("默认用户创建成功")
     except Exception as e:
         logger.error(f"创建数据库表失败: {e}")
         raise

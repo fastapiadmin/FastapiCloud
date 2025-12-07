@@ -1,0 +1,13 @@
+2025-12-08 00:42:18.520 | INFO     | uvicorn.config:__init__:322 - Will watch for changes in these directories: ['/Users/tao/workspace/FastapiCloud']
+2025-12-08 00:42:18.521 | INFO     | uvicorn.config:bind_socket:543 - Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-12-08 00:42:18.521 | INFO     | uvicorn.supervisors.basereload:startup:80 - Started reloader process [35056] using WatchFiles
+2025-12-08 00:42:19.045 | INFO     | uvicorn.server:_serve:84 - Started server process [35060]
+2025-12-08 00:42:19.045 | INFO     | uvicorn.lifespan.on:startup:48 - Waiting for application startup.
+2025-12-08 00:42:19.046 | INFO     | main:lifespan:32 - 用户服务启动...FastapiCloud
+2025-12-08 00:42:19.049 | INFO     | core.database:create_db_and_tables:73 - 数据库表创建成功
+2025-12-08 00:42:19.106 | INFO     | watchfiles.main:_log_changes:308 - 3 changes detected
+2025-12-08 00:42:19.269 | INFO     | uvicorn.lifespan.on:startup:62 - Application startup complete.
+2025-12-08 00:42:21.111 | INFO     | uvicorn.server:shutdown:264 - Shutting down
+2025-12-08 00:42:21.215 | INFO     | uvicorn.lifespan.on:shutdown:67 - Waiting for application shutdown.
+2025-12-08 00:42:21.216 | INFO     | main:lifespan:41 - 用户服务关闭...FastapiCloud
+2025-12-08 00:42:21.229 | INFO     | uvicorn.supervisors.basereload:shutdown:116 - Stopping reloader process [35056]

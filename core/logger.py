@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 
-"""
-统一日志模块
-提供一致的日志记录接口，支持多种日志级别和输出格式
-"""
-
+import sys
 import logging
 from pathlib import Path
-import sys
 from typing import Optional
 from loguru import logger
 
@@ -89,7 +84,7 @@ def setup_logging(
         
         # 配置常规日志文件
         logger.add(
-            str(log_dir / "app.log"),
+            str(log_dir / "info.log"),
             format=log_format,
             level=log_level,
             rotation="00:00",

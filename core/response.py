@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-统一响应格式模块
-提供一致的API响应格式，包括成功、错误和异常响应
-"""
-
 from typing import Union, Dict, Any
 from fastapi import status, HTTPException
 from fastapi.responses import JSONResponse

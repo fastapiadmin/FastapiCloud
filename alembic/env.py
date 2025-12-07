@@ -11,9 +11,8 @@ from alembic import context
 from sqlmodel import SQLModel
 from logging.config import fileConfig
 
-from app.config import settings
+from config import settings
 from core.database import engine
-
 
 # 获取Alembic配置对象
 config: Config = context.config
@@ -22,12 +21,10 @@ config: Config = context.config
 if config.config_file_name is not None:
     fileConfig(fname=config.config_file_name)
 
-# 设置SQLModel的元数据作为迁移目标，所有SQLModel类都会自动注册到这里
-from services.admin.app.models.user import *
 target_metadata = SQLModel.metadata
 
 # 配置数据库连接URL
-config.set_main_option(name="sqlalchemy.url", value=f"sqlite:///{settings.db.BASE_DIR.joinpath(settings.db.SQLITE_DB_NAME)}?check_same_thread=False", )
+config.set_main_option(name="sqlalchemy.url", value=f"sqlite:///{settings.BASE_DIR.joinpath(settings.SQLITE_DB_NAME)}?check_same_thread=False", )
 
 
 def run_migrations_offline() -> None:
