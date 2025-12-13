@@ -1,0 +1,1 @@
+{"version":3,"file":"index-BdhQ8yfz.js","sources":["../../src/api/role/index.ts"],"sourcesContent":["import request from '@/axios'\n\nexport const getRoleListApi = () => {\n  return request.get({ url: '/mock/role/table' })\n}\n"],"names":["getRoleListApi","request"],"mappings":"wCAEO,MAAMA,EAAiB,IACrBC,EAAQ,IAAI,CAAE,IAAK,mBAAoB"}

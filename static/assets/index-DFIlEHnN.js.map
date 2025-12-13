@@ -1,0 +1,1 @@
+{"version":3,"file":"index-DFIlEHnN.js","sources":["../../src/api/menu/index.ts"],"sourcesContent":["import request from '@/axios'\n\nexport const getMenuListApi = () => {\n  return request.get({ url: '/mock/menu/list' })\n}\n"],"names":["getMenuListApi","request"],"mappings":"wCAEO,MAAMA,EAAiB,IACrBC,EAAQ,IAAI,CAAE,IAAK,kBAAmB"}

@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import typer
-import os
 from collections.abc import AsyncGenerator
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -20,7 +19,6 @@ from app.api.router import admin
 cli = typer.Typer()
 # 初始化 Alembic 配置
 alembic_cfg: Config = Config(file_="alembic.ini")
-
 # 初始化日志配置
 setup_logging(log_dir=settings.LOG_DIR)
 
@@ -57,11 +55,15 @@ def create_app() -> FastAPI:
     register_exception_handlers(app)
     # 注册分页插件
     add_pagination(app)
-    # 挂载静态文件
-    static_dir = os.path.join(os.path.dirname(__file__), "static")
-    app.mount(path="/static", app=StaticFiles(directory=static_dir), name="static")
     # 注册路由
     app.include_router(router=admin)
+    # 挂载静态文件
+    app.mount(path="/assets", app=StaticFiles(directory=settings.BASE_DIR.joinpath("static/assets")), name="static")
+    # 处理根路径请求，返回index.html
+    @app.get("/")
+    async def root():
+        from fastapi.responses import FileResponse
+        return FileResponse(settings.BASE_DIR.joinpath("static/index.html"))
     return app
 
 @cli.command()

@@ -1,0 +1,2 @@
+import{_ as t}from"./Error.vue_vue_type_script_setup_true_lang-B5K82jsm.js";import{d as a}from"./index-CMs-epuZ.js";import{v as n,x as c,J as p,u as i,az as m}from"./vue-chunks-COp0tDkU.js";import"./element-plus-B-YefleC.js";const h=n({__name:"403",setup(u){const{push:r}=m(),e=a(),s=()=>{var o;r((o=e.addRouters[0])==null?void 0:o.path)};return(o,_)=>(c(),p(i(t),{type:"403",onErrorClick:s}))}});export{h as default};
+//# sourceMappingURL=403-DcFJjjRv.js.map

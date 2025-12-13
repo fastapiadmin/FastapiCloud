@@ -5,9 +5,8 @@ from app.api.model import User
 from sqlmodel import Session
 from typing import Dict, Union
 from fastapi import Request, APIRouter, Depends, Path, status
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.templating import Jinja2Templates
 from fastapi_pagination import Page, Params
 
 from app.core.logger import logger
@@ -19,16 +18,11 @@ from ..model import User, UserQuerySchema, UserInSchema
 from ..service import UserService
 
 # 创建API路由器
-router = APIRouter(prefix="", tags=["用户管理"])
-templates = Jinja2Templates(directory="templates")
+router = APIRouter(prefix="/api", tags=["用户管理"])
 
 @router.get("/health-check")
 async def health_check() -> bool:
     return True
-
-@router.get("/", summary="首页页面")
-async def home():
-    return FileResponse("static/index.html")
 
 @router.post(
     path="/login", 
