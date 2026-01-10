@@ -1,42 +1,47 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/home/index.vue'
+import Layout from '@/layout/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    redirect: '/login'
+  },
+  {
+    path: '/',
+    name: 'layout',
+    component: Layout,
+    meta: { requiresAuth: true },
+    children: [
+      {        
+        path: '/dashboard',        
+        name: 'dashboard',        
+        meta: { 
+          icon: 'HomeFilled' 
+        },        
+        component: () => import('@/views/dashboard/index.vue')      
+      },      
+      {        
+        path: '/users',        
+        name: 'users',        
+        meta: { 
+          icon: 'User' 
+        },        
+        component: () => import('@/views/user/index.vue')      
+      },
+      {
+        path: '/users/:id',
+        name: 'user-detail',
+        component: () => import('@/views/user/detail.vue'),
+        meta: { title: '用户详情' }
+      }
+    ]
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/auth/index.vue'),
+    component: () => import('../views/login/index.vue'),
     meta: { requiresAuth: false }
-  },
-  {
-    path: '/users',
-    name: 'users',
-    component: () => import('../views/user/index.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/users/create',
-    name: 'createUser',
-    component: () => import('../views/user/components/add.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/users/:id/edit',
-    name: 'editUser',
-    component: () => import('../views/user/components/edit.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/users/:id',
-    name: 'userDetail',
-    component: () => import('../views/user/components/detail.vue'),
-    meta: { requiresAuth: true }
   }
 ]
 
@@ -54,7 +59,7 @@ router.beforeEach((to, _from, next) => {
     next({ name: 'login' })
   } else if (to.path === '/login' && isAuthenticated) {
     // 已登录但访问登录页，重定向到首页
-    next({ name: 'home' })
+    next({ name: 'dashboard' })
   } else {
     // 其他情况正常导航
     next()

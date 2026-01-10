@@ -31,19 +31,9 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
             Response: 响应对象
         """
         # 生成请求ID
-        request_id = str(uuid.uuid4())
-        request.state.request_id = request_id
         
         # 记录请求开始时间
         start_time = time.time()
-        
-        # 记录请求信息
-        logger.info(f"请求开始 [{request_id}]", extra={
-            "method": request.method,
-            "url": str(request.url),
-            "client": request.client.host if request.client else "unknown",
-            "request_id": request_id
-        })
         
         try:
             # 处理请求
@@ -52,28 +42,17 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
             # 计算处理时间
             process_time = time.time() - start_time
             
-            # 记录响应信息
-            logger.info(f"请求完成 [{request_id}]", extra={
-                "method": request.method,
-                "url": str(request.url),
-                "status_code": response.status_code,
-                "process_time": f"{process_time:.3f}s",
-                "request_id": request_id
-            })
-            
             # 添加响应头
             response.headers["X-Process-Time"] = str(process_time)
-            response.headers["X-Request-ID"] = request_id
             
             return response
             
         except Exception as e:
             # 记录异常信息
-            logger.error(f"请求异常 [{request_id}]: {str(e)}", extra={
+            logger.error(f"请求异常: {str(e)}", extra={
                 "method": request.method,
                 "url": str(request.url),
                 "error": str(e),
-                "request_id": request_id
             })
             raise
 

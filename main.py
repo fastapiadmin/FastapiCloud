@@ -28,16 +28,16 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     自定义生命周期
     """
     try:
-        logger.info(f"用户服务启动...{app.title}")
+        logger.info(f"服务启动...{app.title}")
         from app.core.database import create_db_and_tables
         await create_db_and_tables()
 
         yield
     except Exception as e:
-        logger.error(f"用户服务启动失败: {e}")
+        logger.error(f"服务启动失败: {e}")
         raise e
     finally:
-        logger.info(f"用户服务关闭...{app.title}")
+        logger.info(f"服务关闭...{app.title}")
 
 def create_app() -> FastAPI:
     # 创建FastAPI应用
@@ -57,13 +57,14 @@ def create_app() -> FastAPI:
     add_pagination(app)
     # 注册路由
     app.include_router(router=admin)
-    # 挂载静态文件
-    # app.mount(path="/assets", app=StaticFiles(directory=settings.BASE_DIR.joinpath("static/assets")), name="static")
-    # 处理根路径请求，返回index.html
-    # @app.get("/")
-    # async def root():
-    #     from fastapi.responses import FileResponse
-    #     return FileResponse(settings.BASE_DIR.joinpath("static/index.html"))
+    # 先挂载根目录的静态文件，这样可以直接访问/favicon.ico、/logo.svg等
+    app.mount(path="/", app=StaticFiles(directory=settings.BASE_DIR.joinpath("static")), name="static_root")
+    # 处理所有路径请求，返回index.html（用于SPA路由）
+    # 这个路由会在静态文件挂载之后检查，所以存在的静态文件会优先被返回
+    @app.get("/{full_path:path}")
+    async def catch_all(full_path: str):
+        from fastapi.responses import FileResponse
+        return FileResponse(settings.BASE_DIR.joinpath("static/index.html"))
     return app
 
 @cli.command()

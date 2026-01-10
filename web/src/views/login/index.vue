@@ -2,13 +2,13 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { login } from '../../api/user'
-import type { LoginRequest } from '../../api/user'
+import { login } from '@/api/user'
+import type { LoginRequest } from '@/api/user'
 
 const router = useRouter()
 const form = reactive<LoginRequest>({
-  username: '',
-  password: ''
+  username: 'admin',
+  password: '123456'
 })
 const loading = ref(false)
 
@@ -23,7 +23,7 @@ const handleSubmit = async () => {
   try {
     await login(form)
     ElMessage.success('登录成功')
-    router.push('/users')
+    router.push('/dashboard')
   } catch (error) {
     ElMessage.error('登录失败，请检查用户名和密码')
     console.error('Login error:', error)
@@ -35,30 +35,32 @@ const handleSubmit = async () => {
 
 <template>
   <div class="login-container">
-    <!-- 背景装饰元素 -->
-    <div class="background-decoration">
-      <img src="@/assets/vue.svg" alt="Vue Logo" class="decoration-icon vue-icon">
-      <img src="@/assets/fastapi-logo.svg" alt="FastAPI Logo" class="decoration-icon fastapi-icon">
+    <!-- 左侧图片 -->
+    <div class="login-left">
+      <img src="@/assets/imgs/login-box-bg.svg" alt="Login Background" class="left-image">
     </div>
     
-    <div class="login-form-wrapper">
-      <div class="login-header">
-      <img src="@/assets/fastapi-logo.svg" alt="FastAPI Logo" class="login-logo">
-      <h2 class="login-title">用户登录</h2>
-    </div>
-      <el-form :model="form" label-width="80px" class="login-form">
-        <el-form-item label="用户名">
-          <el-input v-model="form.username" placeholder="请输入用户名" />
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="form.password" type="password" placeholder="请输入密码" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSubmit" :loading="loading" class="login-button">
-            登录
-          </el-button>
-        </el-form-item>
-      </el-form>
+    <!-- 右侧登录表单 -->
+    <div class="login-right">
+      <div class="login-form-wrapper">
+        <div class="login-header">
+          <img src="@/assets/imgs/logo-dark.svg" alt="Logo" class="login-logo">
+          <h2 class="login-title">用户登录</h2>
+        </div>
+        <el-form :model="form" label-width="80px" class="login-form">
+          <el-form-item label="用户名">
+            <el-input v-model="form.username" placeholder="请输入用户名" />
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="form.password" type="password" placeholder="请输入密码" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="handleSubmit" :loading="loading" class="login-button">
+              登录
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -66,54 +68,37 @@ const handleSubmit = async () => {
 <style scoped>
 .login-container {
   display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-image: url('@/assets/imgs/login-bg.svg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* 左侧图片区域 */
+.login-left {
+  width: 50%;
+  height: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f5f7fa;
-  position: relative;
+  background-color: #f8f9fa;
   overflow: hidden;
 }
 
-/* 背景装饰元素 */
-.background-decoration {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+.left-image {
+  width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* 右侧登录区域 */
+.login-right {
+  width: 50%;
   height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.decoration-icon {
-  position: absolute;
-  opacity: 0.05;
-  animation: float 8s ease-in-out infinite;
-}
-
-.vue-icon {
-  top: 15%;
-  left: 15%;
-  width: 180px;
-  height: auto;
-  animation-delay: 0s;
-}
-
-.fastapi-icon {
-  bottom: 15%;
-  right: 15%;
-  width: 220px;
-  height: auto;
-  animation-delay: 3s;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-30px) rotate(5deg);
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-form-wrapper {
@@ -140,10 +125,9 @@ const handleSubmit = async () => {
 }
 
 .login-logo {
-  height: 70px;
+  height: 40px;
   width: auto;
   margin-bottom: 20px;
-  animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -181,6 +165,25 @@ const handleSubmit = async () => {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+  
+  .login-left,
+  .login-right {
+    width: 100%;
+    height: auto;
+  }
+  
+  .login-left {
+    height: 30vh;
+    padding: 20px;
+  }
+  
+  .login-right {
+    height: 70vh;
+  }
+  
   .login-form-wrapper {
     width: 90%;
     margin: 0 5%;
@@ -191,16 +194,8 @@ const handleSubmit = async () => {
     height: 60px;
   }
   
-  .decoration-icon {
-    opacity: 0.03;
-  }
-  
-  .vue-icon {
-    width: 120px;
-  }
-  
-  .fastapi-icon {
-    width: 150px;
+  .left-image {
+    width: 60%;
   }
 }
 
@@ -217,12 +212,8 @@ const handleSubmit = async () => {
     font-size: 1.5rem;
   }
   
-  .vue-icon {
-    width: 80px;
-  }
-  
-  .fastapi-icon {
-    width: 100px;
+  .left-image {
+    width: 80%;
   }
 }
 </style>

@@ -11,6 +11,8 @@ export default defineConfig({
     }
   },
   build: {
+    chunkSizeWarningLimit: 1000, // 调整警告限制到1000kB
+    outDir: path.resolve(__dirname, '../static/'), // 指定构建输出目录
     rollupOptions: {
       output: {
         manualChunks(id) {
