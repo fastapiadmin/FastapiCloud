@@ -3,7 +3,8 @@
 
 import typer
 from collections.abc import AsyncGenerator
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi_pagination import add_pagination
 from fastapi.concurrency import asynccontextmanager
@@ -14,6 +15,7 @@ from core.config import settings
 from core.logger import logger, setup_logging
 from core.middlewares import register_middleware_handler
 from core.exceptions import register_exception_handlers
+from core.plugins import PluginManager, PluginContext
 from apps.api.router import admin
 
 cli = typer.Typer()
@@ -31,11 +33,20 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
         logger.info(f"服务启动...{app.title}")
         from core.database import create_db_and_tables
         await create_db_and_tables()
+        
+        # 加载插件
+        plugin_context = PluginContext(app=app, settings=settings, logger=logger)
+        app.state.plugin_manager = PluginManager(plugin_context)
+        await app.state.plugin_manager.load_all_plugins()
+        
         yield
     except Exception as e:
         logger.error(f"服务启动失败: {e}")
         raise e
     finally:
+        # 卸载插件
+        if hasattr(app.state, "plugin_manager"):
+            await app.state.plugin_manager.unload_all_plugins()
         logger.info(f"服务关闭...{app.title}")
 
 def create_app() -> FastAPI:
@@ -56,8 +67,35 @@ def create_app() -> FastAPI:
     add_pagination(app)
     # 注册路由
     app.include_router(router=admin)
+    
+    # 尝试直接导入demo_router，这样FastAPI就能在启动时发现路由了
+    try:
+        from plugins.demo_plugin.demo_plugin import demo_router
+        app.include_router(demo_router)
+        logger.info(f"已直接注册demo_router: {demo_router.prefix}")
+    except ImportError as e:
+        logger.warning(f"无法导入demo_router: {e}")
+    except Exception as e:
+        logger.error(f"注册demo_router时出错: {e}")
     # 先挂载根目录的静态文件，这样可以直接访问/favicon.ico、/logo.svg等
     app.mount(path="/", app=StaticFiles(directory=settings.BASE_DIR.joinpath("static")), name="static")
+    
+    # 调试端点，用于查看所有注册的路由
+    @app.get("/debug/routes")
+    async def get_all_routes(request: Request):
+        routes = []
+        for route in request.app.routes:
+            if hasattr(route, "path"):
+                routes.append({
+                    "path": route.path,
+                    "name": route.name,
+                    "methods": list(route.methods) if hasattr(route, "methods") else []
+                })
+        return JSONResponse({
+            "status": "success",
+            "routes": routes
+        })
+    
     return app
 
 @cli.command()

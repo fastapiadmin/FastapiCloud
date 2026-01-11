@@ -67,6 +67,8 @@ fastapicloud/
 └─ README.md         # Chinese documentation
 ```
 
+![service screenshot](./web/src/assets/imgs/image.png)
+
 ### Quick Start
 
 - 1. Clone the project

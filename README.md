@@ -67,6 +67,8 @@ fastapicloud/
 └─ README.md         # 中文文档
 ```
 
+![服务截图](./web/src/assets/imgs/image.png)
+
 ### 快速开始
 
 - 1. 克隆项目
