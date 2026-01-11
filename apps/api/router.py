@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from fastapi import APIRouter
-from app.api.v1.controller import router
+from apps.api.v1.controller import router
 
 admin = APIRouter()
 

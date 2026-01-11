@@ -14,9 +14,7 @@ class Settings(BaseSettings):
     )
     
     # 项目根目录
-    BASE_DIR: Path = Path(__file__).parent.parent.parent
-
-    print(BASE_DIR)
+    BASE_DIR: Path = Path(__file__).parent.parent
 
     # 基础配置
     DEBUG: bool = True

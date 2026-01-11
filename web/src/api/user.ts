@@ -26,7 +26,6 @@ export interface UserForm {
 export interface UserQuery {
   page?: number;
   size?: number;
-  username?: string;
   name?: string;
 }
 

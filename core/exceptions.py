@@ -7,8 +7,8 @@ from typing import Any, Dict, Optional
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from contextvars import ContextVar
 
-from app.core.response import ErrorResponse
-from app.core.logger import get_logger
+from core.response import ErrorResponse
+from core.logger import get_logger
 
 # 创建请求ID上下文变量
 request_id_ctx_var: ContextVar[str] = ContextVar("request_id", default="")

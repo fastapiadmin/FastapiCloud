@@ -162,7 +162,6 @@ response = agent.invoke(
 )
 
 # =================解析响应=================
-print(response['structured_response'])
 # ResponseFormat(
 #     punny_response="Florida is still having a 'sun-derful' day! The sunshine is playing 'ray-dio' hits all day long! I'd say it's the perfect weather for some 'solar-bration'! If you were hoping for rain, I'm afraid that idea is all 'washed up' - the forecast remains 'clear-ly' brilliant!",
 #     weather_conditions="It's always sunny in Florida!"

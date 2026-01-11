@@ -4,7 +4,7 @@ from typing import Any
 from fastapi import status, HTTPException
 from fastapi.responses import JSONResponse
 
-from app.core.base import BaseResponse
+from core.base import BaseResponse
 
 
 class SuccessResponse(JSONResponse):

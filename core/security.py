@@ -4,8 +4,8 @@ from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 import bcrypt
 
-from app.core.config import settings
-from app.core.base import JWTPayloadSchema
+from core.config import settings
+from core.base import JWTPayloadSchema
 
 
 def create_access_token(payload: JWTPayloadSchema) -> str:

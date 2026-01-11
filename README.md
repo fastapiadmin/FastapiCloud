@@ -2,7 +2,7 @@
    <p align="center">
       <img src="./frontend/src/static//logo.png" height="150" alt="logo"/>
    </p>
-   <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">Fastapi_Vue3_App</h1>
+   <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">FastapiCloud</h1>
    <h4 align="center">A rapid development framework for mobile, mini-program, and H5 applications with separated front - end and back - end, based on Fastapi - Vue3 - App.</h4>
    <p align="center">
       <a href="https://gitee.com/tao__tao/fastapi_vue3_app.git">

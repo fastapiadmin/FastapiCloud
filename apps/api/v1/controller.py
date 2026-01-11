@@ -5,10 +5,10 @@ from fastapi import Request, APIRouter, Depends, WebSocket, status
 from fastapi.responses import JSONResponse
 from fastapi_pagination import Page
 
-from app.core.logger import logger
-from app.core.database import DB
-from app.core.response import BaseResponse, ExceptResponse, ErrorResponse, SuccessResponse
-from app.core.base import JWTOutSchema
+from core.logger import logger
+from core.database import DB
+from core.response import BaseResponse, ExceptResponse, ErrorResponse, SuccessResponse
+from core.base import JWTOutSchema
 from ..dependencies import (
     get_current_user, PaginationParams, LoginForm,
     CurrentUser, UserQuery, UserCreateData, UserUpdateData, UserID

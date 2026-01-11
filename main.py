@@ -10,11 +10,11 @@ from fastapi.concurrency import asynccontextmanager
 from alembic import command
 from alembic.config import Config
 
-from app.core.config import settings
-from app.core.logger import logger, setup_logging
-from app.core.middlewares import register_middleware_handler
-from app.core.exceptions import register_exception_handlers
-from app.api.router import admin
+from core.config import settings
+from core.logger import logger, setup_logging
+from core.middlewares import register_middleware_handler
+from core.exceptions import register_exception_handlers
+from apps.api.router import admin
 
 cli = typer.Typer()
 # 初始化 Alembic 配置
@@ -29,9 +29,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     """
     try:
         logger.info(f"服务启动...{app.title}")
-        from app.core.database import create_db_and_tables
+        from core.database import create_db_and_tables
         await create_db_and_tables()
-
         yield
     except Exception as e:
         logger.error(f"服务启动失败: {e}")
@@ -58,13 +57,7 @@ def create_app() -> FastAPI:
     # 注册路由
     app.include_router(router=admin)
     # 先挂载根目录的静态文件，这样可以直接访问/favicon.ico、/logo.svg等
-    app.mount(path="/", app=StaticFiles(directory=settings.BASE_DIR.joinpath("static")), name="static_root")
-    # 处理所有路径请求，返回index.html（用于SPA路由）
-    # 这个路由会在静态文件挂载之后检查，所以存在的静态文件会优先被返回
-    @app.get("/{full_path:path}")
-    async def catch_all(full_path: str):
-        from fastapi.responses import FileResponse
-        return FileResponse(settings.BASE_DIR.joinpath("static/index.html"))
+    app.mount(path="/", app=StaticFiles(directory=settings.BASE_DIR.joinpath("static")), name="static")
     return app
 
 @cli.command()

@@ -28,7 +28,6 @@ const router = useRouter()
 const query = ref<UserQuery>({
   page: currentPage.value,
   size: pageSize.value,
-  username: '',
   name: ''
 })
 
@@ -96,7 +95,7 @@ const handleCreateSubmit = async () => {
     resetCreateForm()
   } catch (error) {
     ElMessage.error('创建用户失败')
-    console.error('Create user error:', error)
+    console.error('创建用户失败:', error)
   } finally {
     createLoading.value = false
   }
@@ -292,11 +291,6 @@ onMounted(() => {
         <div class="card-header">
           <!-- 搜索栏 -->
           <el-form class="search-bar" :model="query" inline>
-            <el-input
-              v-model="query.username"
-              placeholder="用户名"
-              style="width: 200px; margin-right: 10px"
-            />
             <el-input
               v-model="query.name"
               placeholder="姓名"

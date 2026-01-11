@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import time
-import uuid
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from typing import Annotated
-from fastapi import Depends, HTTPException, Path, status
+from fastapi import Body, Depends, HTTPException, Path, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi_pagination import Params
 from sqlmodel import Session, select
 
-from app.core.database import get_db
-from app.core.security import decode_access_token
-from app.api.model import User, UserQuerySchema, UserInSchema
+from core.database import get_db
+from core.security import decode_access_token
+from apps.api.model import User, UserQuerySchema, UserInSchema
 
 
 # OAuth2密码承载令牌
@@ -51,10 +51,10 @@ LoginForm = Annotated[OAuth2PasswordRequestForm, Depends()]
 UserQuery = Annotated[UserQuerySchema, Depends()]
 
 # 用户创建数据
-UserCreateData = Annotated[UserInSchema, Depends()]
+UserCreateData = Annotated[UserInSchema, Body(...)]
 
 # 用户更新数据
-UserUpdateData = Annotated[UserInSchema, Depends()]
+UserUpdateData = Annotated[UserInSchema, Body(...)]
 
 # 用户ID路径参数
-UserID = Annotated[int, Path(default=..., description="用户ID", ge=1)]
+UserID = Annotated[int, Path(...)]

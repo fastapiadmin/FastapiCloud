@@ -21,7 +21,7 @@ if config.config_file_name is not None:
 
 from core.config import settings
 from core.database import engine
-from api.model import SQLModel
+from apps.api.model import SQLModel
 
 
 target_metadata = SQLModel.metadata
